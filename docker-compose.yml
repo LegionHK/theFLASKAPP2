@@ -1,0 +1,29 @@
+version: "3"
+services:
+  db:
+      image: "postgres:latest"
+      environment:
+        POSTGRES_USER: user
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: db
+      networks:
+        - db_new
+
+  flaskapp:
+    build: .
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+      USE_POSTGRES: ok
+    networks:
+      - db_new
+    depends_on:
+      - db
+    ports:
+      ["5000:5000"]
+
+
+networks:
+  db_new:
+    driver: bridge
